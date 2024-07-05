@@ -1,216 +1,141 @@
-<!DOCTYPE html>
-<html lang="en-us">
-  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+<html lang="en">
+  <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light" />
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico/css/pico.min.css">
+    <title>Medienapplikation Uebung</title>
+    <link rel="manifest" href="app.webmanifest">
+    <script src="https://unpkg.com/alpinejs" defer></script>
     
-    <title>My New Hugo Site</title>
-    <meta name="viewport" content="width=device-width,minimum-scale=1">
-    <meta name="description" content="">
-    <meta name="generator" content="Hugo 0.126.1">
-    
-    
-    
-    
-      <meta name="robots" content="noindex, nofollow">
-    
-    
+    <script>
+      window.addEventListener("deviceorientation", handleOrientation, true);
+      function handleOrientation(event) {
+      let winkel = Math.abs(event.beta/180);
+      output.innerText=winkel+10;
 
-    
-<link rel="stylesheet" href="/ananke/css/main.min.css" >
+      bild.style.opacity = winkel*2;
+      }
 
-
-
-    
-
-    
+    </script>
+    <script>
+        // Check if service worker is supported
+        if ('serviceWorker' in navigator) {
+          window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js')
+              .then(reg => console.log('Service Worker registered', reg))
+              .catch(err => console.log('Service Worker registration failed', err));
+          });
+        }
       
-
-    
-
-    
-    
-      <link href="/index.xml" rel="alternate" type="application/rss+xml" title="My New Hugo Site" />
-      <link href="/index.xml" rel="feed" type="application/rss+xml" title="My New Hugo Site" />
+        // Request notification permission on page load
+        document.addEventListener('DOMContentLoaded', function () {
+          if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+            Notification.requestPermission().then(permission => {
+              if (permission === 'granted') {
+                console.log('Notification permission granted.');
+              }
+            });
+          }
+        });
       
-    
+        // Send notification data to the service worker
+        function sendNotification() {
+          if (navigator.serviceWorker.controller) {
+            navigator.serviceWorker.controller.postMessage({
+              title: 'Hello!',
+              body: 'This is a notification from your service worker.',
+            });
+          }
+        }
+      
+        // Add event listener to the button
+        document.getElementById('sendNotifyButton').addEventListener('click', sendNotification);
+      </script>
 
-    
-      <link rel="canonical" href="http://localhost:1313/">
-    
-
-    <meta property="og:url" content="http://localhost:1313/">
-  <meta property="og:site_name" content="My New Hugo Site">
-  <meta property="og:title" content="My New Hugo Site">
-  <meta property="og:locale" content="en_us">
-  <meta property="og:type" content="website">
-
-  <meta itemprop="name" content="My New Hugo Site">
-  <meta itemprop="dateModified" content="2024-05-30T16:10:44+02:00">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="My New Hugo Site">
-
-	
   </head>
+  <body x-data="{
+    name: 'Collin',
+    online: navigator.onLine,
 
-  <body class="ma0 avenir bg-near-white">
-
-    
-
-  <header>
-    <div class="pb3-m pb6-l bg-black">
-      <nav class="pv3 ph3 ph4-ns" role="navigation">
-  <div class="flex-l justify-between items-center center">
-    <a href="/" class="f3 fw2 hover-white no-underline white-90 dib">
+  }"
+    @online.window="online=true"
+    @offline.window="online=false"
+    >
+    <main class="container">
+      <h1>Willkommen <span x-text="name"></span>!</h1>
+      <button @click="online = !online">Hilfe rufen</button>
+      <input type="text" x-model="name">
+      <!--<div x-show="online">Online</div> -->
+      <div x-text="online ? 'ONLINE' : 'OFFLINE'" :style="{color: online? 'green' : 'red'}"></div>
       
-        My New Hugo Site
+      <!-- Teilen Button // Web Share API -->
+      <button onclick="
       
-    </a>
-    <div class="flex-l items-center">
-      
+          let data = {
+            title: 'Collinswebsite',
+            text: 'Die Webseite des Collin Müller',
+            url: 'https://www.tu-chemnitz.de'
+          };
+          
+          if (navigator.share && navigator.canShare(data)) {
+            navigator.share(data)
+            let alterText = this.innerText;
+            this.innerText = 'Link kopiert!';
+            setTimeout(() => this.innerText = alterText, 3000);
+          }
 
-      
-      
-<div class="ananke-socials">
-  
-</div>
+          else {
+            // keine web share api
+            navigator.clipboard.writeText(data.url);
 
-    </div>
-  </div>
-</nav>
+            knopf.setAttribute('data tooltip', 'link kopiert!');
+          }      
+      ">Teilen</button>
+      <div id="output"></div>
+      <button title="tooltip" onclick="
+        navigator.clipboard.writeText('Nachricht');
+        this.setAttribute('data tooltip', 'Nachricht kopiert');
+      ">Kopieren</button>
+      <button id="grantNotifyButton">Notifications erlauben</button>
+      <button id="sendNotifyButton" style="display:none;">Benachrichtigung senden</button>
 
-      <div class="tc-l pv3 ph3 ph4-ns">
-        <h1 class="f2 f-subheadline-l fw2 light-silver mb0 lh-title">
-          My New Hugo Site
-        </h1>
-        
+      <script>
+        document.getElementById('grantNotifyButton').addEventListener('click', function() {
+            // Berechtigung für Benachrichtigungen anfragen
+            Notification.requestPermission().then(function(permission) {
+                if (permission === "granted") {
+                    // sendNotifyButton anzeigen
+                    document.getElementById('sendNotifyButton').style.display = 'block';
+                } else {
+                    alert("Benachrichtigungen wurden blockiert.");
+                }
+            });
+        });
+
+        document.getElementById('sendNotifyButton').addEventListener('click', function() {
+            // Eine neue Benachrichtigung erstellen, wenn die Berechtigung erteilt wurde
+            if (navigator.serviceWorker.controller) {
+                // Eine Nachricht mit den Benachrichtigungsdetails an den Service Worker senden
+                navigator.serviceWorker.controller.postMessage({
+                    title: "Hallo Welt!",
+                    body: "Das ist eine Benachrichtigung.",
+                    icon: "https://example.com/icon.png" // Optional: Ein Icon für die Benachrichtigung
+                });
+            } else {
+                alert("Service Worker ist nicht aktiv.");
+            }
+        });
+        </script>
+
+      <div style="
+      background-image: url(https://www-user.tu-chemnitz.de/~wilt/km/Karl-Marx-Kopf_KMS.jpg);
+      background-size: contain;
+      ">
+        <img id="bild" src="https://www-user.tu-chemnitz.de/~wilt/km/Karl-Marx-Kopf_C.jpg"  >
       </div>
-    </div>
-  </header>
-
-
-    <main class="pb7" role="main">
-      
-  <article class="cf ph3 ph5-l pv3 pv4-l f4 tc-l center measure-wide lh-copy mid-gray">
-      
-    </article>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-      <div class="pa3 pa4-ns w-100 w-70-ns center">
-        
-        
-            <h1 class="flex-none">
-              Recent Posts
-            </h1>
-          
-
-        
-
-        <section class="w-100 mw8">
-          
-          
-            <div class="relative w-100 mb4">
-              
-<article class="bb b--black-10">
-  <div class="db pv4 ph3 ph0-l no-underline dark-gray">
-    <div class="flex flex-column flex-row-ns">
-      
-      <div class="blah w-100">
-        <h1 class="f3 fw1 athelas mt0 lh-title">
-          <a href="/posts/my-third-post/" class="color-inherit dim link">
-            My Third Post
-            </a>
-        </h1>
-        <div class="f6 f5-l lh-copy nested-copy-line-height nested-links">
-          
-        </div>
-          <a href="/posts/my-third-post/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
-        
-      </div>
-    </div>
-  </div>
-</article>
-
-            </div>
-          
-            <div class="relative w-100 mb4">
-              
-<article class="bb b--black-10">
-  <div class="db pv4 ph3 ph0-l no-underline dark-gray">
-    <div class="flex flex-column flex-row-ns">
-      
-      <div class="blah w-100">
-        <h1 class="f3 fw1 athelas mt0 lh-title">
-          <a href="/posts/my-secon-post/" class="color-inherit dim link">
-            My Secon Post
-            </a>
-        </h1>
-        <div class="f6 f5-l lh-copy nested-copy-line-height nested-links">
-          
-        </div>
-          <a href="/posts/my-secon-post/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
-        
-      </div>
-    </div>
-  </div>
-</article>
-
-            </div>
-          
-            <div class="relative w-100 mb4">
-              
-<article class="bb b--black-10">
-  <div class="db pv4 ph3 ph0-l no-underline dark-gray">
-    <div class="flex flex-column flex-row-ns">
-      
-      <div class="blah w-100">
-        <h1 class="f3 fw1 athelas mt0 lh-title">
-          <a href="/posts/my-first-post/" class="color-inherit dim link">
-            My First Post
-            </a>
-        </h1>
-        <div class="f6 f5-l lh-copy nested-copy-line-height nested-links">
-          test.123 awsg asdfasrgSdvc
-        </div>
-          <a href="/posts/my-first-post/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
-        
-      </div>
-    </div>
-  </div>
-</article>
-
-            </div>
-          
-        </section>
-
-        
-
-        </div>
-    
-  
-
     </main>
-    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
-  <div class="flex justify-between">
-  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="http://localhost:1313/" >
-    &copy;  My New Hugo Site 2024 
-  </a>
-    <div>
-<div class="ananke-socials">
-  
-</div>
-</div>
-  </div>
-</footer>
 
+  
   </body>
 </html>
