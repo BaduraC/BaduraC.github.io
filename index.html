@@ -1,141 +1,133 @@
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="color-scheme" content="light" />
-    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico/css/pico.min.css">
-    <title>Medienapplikation Uebung</title>
-    <link rel="manifest" href="app.webmanifest">
-    <script src="https://unpkg.com/alpinejs" defer></script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Website</title>
+    <style>
+        .transparent-field {
+            position: fixed; /* Changed to fixed to cover the screen */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 0, 0, 0.5);
+            z-index: 1;
+            display: none; /* Initially hidden */
+        }
+
+        .toggle-button {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 2;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <button class="toggle-button">Toggle Overlay</button>
+    <div class="transparent-field">
+        <canvas id="drawingCanvas"></canvas>
+    </div>
+
+    <div class="swipe-up-area" style="position: fixed; bottom: 0; width: 100%; height: 50px; background: #ccc; text-align: center; line-height: 50px;">
+        Swipe up here
+    </div>
     
+    <h1>Welcome to My Website</h1>
+    <p>This is a basic HTML website.</p>
     <script>
-      window.addEventListener("deviceorientation", handleOrientation, true);
-      function handleOrientation(event) {
-      let winkel = Math.abs(event.beta/180);
-      output.innerText=winkel+10;
+        let startY, endY;
+        let moving = false; // Track if the mouse is being dragged
+        const threshold = 50; // Minimum vertical movement required to trigger the action
 
-      bild.style.opacity = winkel*2;
-      }
+        // Function to handle the start of a swipe or mouse drag
+        function startAction(e) {
+            startY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+            moving = true; // Start tracking movement
+            e.preventDefault(); // Prevent default action (scroll / drag)
+        }
 
+        // Function to handle movement (for both touch and mouse)
+        function moveAction(e) {
+            if (moving) {
+                let currentY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+                endY = currentY;
+            }
+        }
+
+        // Function to handle the end of a swipe or mouse drag
+        function endAction(e) {
+            if (moving && startY - endY > threshold) { // Swipe up or drag up
+                document.querySelector('.transparent-field').style.display = 'block';
+            }
+            moving = false; // Stop tracking movement
+        }
+
+        const swipeArea = document.querySelector('.swipe-up-area');
+        swipeArea.addEventListener('touchstart', startAction, false);
+        swipeArea.addEventListener('touchmove', moveAction, false);
+        swipeArea.addEventListener('touchend', endAction, false);
+
+        // Mouse event listeners
+        swipeArea.addEventListener('mousedown', startAction, false);
+        swipeArea.addEventListener('mousemove', moveAction, false);
+        swipeArea.addEventListener('mouseup', endAction, false);
     </script>
     <script>
-        // Check if service worker is supported
-        if ('serviceWorker' in navigator) {
-          window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/sw.js')
-              .then(reg => console.log('Service Worker registered', reg))
-              .catch(err => console.log('Service Worker registration failed', err));
-          });
+        document.querySelector('.toggle-button').addEventListener('click', function() {
+            var field = document.querySelector('.transparent-field');
+            field.style.display = field.style.display === 'none' ? 'block' : 'none';
+        });
+
+        var canvas = document.getElementById('drawingCanvas');
+        var ctx = canvas.getContext('2d');
+
+        // Resize canvas to full overlay size
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        var drawing = false;
+
+        function startDrawing(e) {
+            drawing = true;
+            draw(e); // This ensures drawing starts immediately on mousedown/touchstart
         }
-      
-        // Request notification permission on page load
-        document.addEventListener('DOMContentLoaded', function () {
-          if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
-            Notification.requestPermission().then(permission => {
-              if (permission === 'granted') {
-                console.log('Notification permission granted.');
-              }
-            });
-          }
-        });
-      
-        // Send notification data to the service worker
-        function sendNotification() {
-          if (navigator.serviceWorker.controller) {
-            navigator.serviceWorker.controller.postMessage({
-              title: 'Hello!',
-              body: 'This is a notification from your service worker.',
-            });
-          }
+
+        function endDrawing() {
+            drawing = false;
+            ctx.beginPath(); // Begin a new path to start a new stroke
         }
-      
-        // Add event listener to the button
-        document.getElementById('sendNotifyButton').addEventListener('click', sendNotification);
-      </script>
 
-  </head>
-  <body x-data="{
-    name: 'Collin',
-    online: navigator.onLine,
+        function draw(e) {
+            if (!drawing) return;
+            ctx.lineWidth = 5;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = 'white';
 
-  }"
-    @online.window="online=true"
-    @offline.window="online=false"
-    >
-    <main class="container">
-      <h1>Willkommen <span x-text="name"></span>!</h1>
-      <button @click="online = !online">Hilfe rufen</button>
-      <input type="text" x-model="name">
-      <!--<div x-show="online">Online</div> -->
-      <div x-text="online ? 'ONLINE' : 'OFFLINE'" :style="{color: online? 'green' : 'red'}"></div>
-      
-      <!-- Teilen Button // Web Share API -->
-      <button onclick="
-      
-          let data = {
-            title: 'Collinswebsite',
-            text: 'Die Webseite des Collin Müller',
-            url: 'https://www.tu-chemnitz.de'
-          };
-          
-          if (navigator.share && navigator.canShare(data)) {
-            navigator.share(data)
-            let alterText = this.innerText;
-            this.innerText = 'Link kopiert!';
-            setTimeout(() => this.innerText = alterText, 3000);
-          }
+            ctx.lineTo(e.clientX || e.touches[0].clientX, e.clientY || e.touches[0].clientY);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(e.clientX || e.touches[0].clientX, e.clientY || e.touches[0].clientY);
+        }
 
-          else {
-            // keine web share api
-            navigator.clipboard.writeText(data.url);
+        // Event listeners for mouse
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mouseup', endDrawing);
+        canvas.addEventListener('mousemove', draw);
 
-            knopf.setAttribute('data tooltip', 'link kopiert!');
-          }      
-      ">Teilen</button>
-      <div id="output"></div>
-      <button title="tooltip" onclick="
-        navigator.clipboard.writeText('Nachricht');
-        this.setAttribute('data tooltip', 'Nachricht kopiert');
-      ">Kopieren</button>
-      <button id="grantNotifyButton">Notifications erlauben</button>
-      <button id="sendNotifyButton" style="display:none;">Benachrichtigung senden</button>
-
-      <script>
-        document.getElementById('grantNotifyButton').addEventListener('click', function() {
-            // Berechtigung für Benachrichtigungen anfragen
-            Notification.requestPermission().then(function(permission) {
-                if (permission === "granted") {
-                    // sendNotifyButton anzeigen
-                    document.getElementById('sendNotifyButton').style.display = 'block';
-                } else {
-                    alert("Benachrichtigungen wurden blockiert.");
-                }
-            });
-        });
-
-        document.getElementById('sendNotifyButton').addEventListener('click', function() {
-            // Eine neue Benachrichtigung erstellen, wenn die Berechtigung erteilt wurde
-            if (navigator.serviceWorker.controller) {
-                // Eine Nachricht mit den Benachrichtigungsdetails an den Service Worker senden
-                navigator.serviceWorker.controller.postMessage({
-                    title: "Hallo Welt!",
-                    body: "Das ist eine Benachrichtigung.",
-                    icon: "https://example.com/icon.png" // Optional: Ein Icon für die Benachrichtigung
-                });
-            } else {
-                alert("Service Worker ist nicht aktiv.");
-            }
-        });
-        </script>
-
-      <div style="
-      background-image: url(https://www-user.tu-chemnitz.de/~wilt/km/Karl-Marx-Kopf_KMS.jpg);
-      background-size: contain;
-      ">
-        <img id="bild" src="https://www-user.tu-chemnitz.de/~wilt/km/Karl-Marx-Kopf_C.jpg"  >
-      </div>
-    </main>
-
-  
-  </body>
+        // Event listeners for touch
+        canvas.addEventListener('touchstart', startDrawing);
+        canvas.addEventListener('touchend', endDrawing);
+        canvas.addEventListener('touchmove', draw);
+    </script>
+</body>
 </html>
