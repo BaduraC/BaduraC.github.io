@@ -1,7 +1,7 @@
 {
     "name": "Forschungspraktikum",
     "short_name": "ForschPra",
-    "start_url": "/~mcol/",
+    "start_url": "/index.htm/",
     "display": "standalone",
     "icons": [
         {
