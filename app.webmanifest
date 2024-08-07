@@ -1,16 +1,16 @@
 {
-    "name": "Abstimmung",
-    "short_name": "myapp",
+    "name": "Forschungspraktikum",
+    "short_name": "ForschPra",
     "start_url": "/~mcol/",
     "display": "standalone",
     "icons": [
         {
-            "src": "icons/512bild.png",
+            "src": "icons/512pwa_dalle.png",
             "type": "image/png",
             "sizes": "512x512"
          },
          {
-            "src": "icons/1024bild.png",
+            "src": "icons/1024pwa_dalle.png",
             "type": "image/png",
             "sizes": "1024x1024"
          }
