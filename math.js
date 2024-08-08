@@ -23,7 +23,7 @@ function generateQuestion() {
     }
 
     currentQuestion = `${num1} ${operator} ${num2}`;
-    document.getElementById('question').innerText = currentQuestion;
+    document.querySelector('#task-container').innerText = currentQuestion;
 }
 
 function checkAnswer() {
@@ -51,4 +51,6 @@ window.onload=function() {
             checkAnswer();
         }
     });
-};
+}
+
+export {generateQuestion, checkAnswer};

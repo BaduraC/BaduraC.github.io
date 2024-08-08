@@ -17,7 +17,7 @@
     <script src="https://unpkg.com/alpinejs" defer></script>
     <script src="tafel.js" defer></script>
     <script src="math.js" defer></script>
-    <script src="swiper-init.js" defer></script>
+    <script type="module" src="swiper-init.js" defer></script>
 </head>
 
 <body>
@@ -31,21 +31,14 @@
     <div class="swiper-container">
         <div class="swiper-wrapper">
             <div class="swiper-slide">
-                <div id="math-container">
-                    <div id="question"></div>
-                    <input type="text" id="answer" placeholder="Deine Antwort">
-                    <button onclick="checkAnswer()">Antwort überprüfen</button>
-                    <div id="feedback"></div>
-                </div>
+                <div id="task-container"></div>
             </div>
             <div class="swiper-slide">
-                <h2>weitere Aufgabe:</h2>
+                <div id="task-container"></div>
             </div>
             <div class="swiper-pagination"></div>
             <div class="swiper-button-next"></div>
             <div class="swiper-button-prev"></div>
         </div>
-    <h1>Welcome to My Website</h1>
-    <p>This is a basic HTML website.</p>
 </body>
 </html>

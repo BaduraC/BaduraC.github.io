@@ -1,3 +1,5 @@
+import { generateQuestion } from "./math.js";
+
 document.addEventListener('DOMContentLoaded', function() {
     const swiper = new Swiper('.swiper-container', {
         direction: 'vertical',
@@ -10,7 +12,13 @@ document.addEventListener('DOMContentLoaded', function() {
             nextEl: '.swiper-button-next',
             prevEl: '.swiper-button-prev',
         },
+        on: {
+            slideChange: function() {
+                generateQuestion();
+            }
+        }
     });
 
+    //generate the first question when the side is loading
     generateQuestion();
 });
