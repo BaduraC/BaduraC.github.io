@@ -44,4 +44,11 @@ function checkAnswer() {
 }
 
 // Initiale Frage generieren
-generateQuestion();
+window.onload=function() {
+    generateQuestion();
+    document.getElementById('answer').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            checkAnswer();
+        }
+    });
+};
