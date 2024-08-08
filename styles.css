@@ -45,15 +45,25 @@ button {
 
 .swiper-slide {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    text-align: center;
     font-size: 18px;
     background: #fff;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
-#task-container {
-    font-size: 24px;
-    font-weight: bold;
+.task-container {
+    width: 100%;
+    max-width: 600px;
+    margin:0 auto;
+}
+
+.task{
+    font-size: 1.5em;
+    margin-bottom:20px
 }
 
 .swiper-button-next,
@@ -63,4 +73,21 @@ button {
     top: 50%;
     transform: translateY(-50%);
     z-index: 10; /* Stelle sicher, dass die Pfeile über den Slides liegen */
+}
+
+.answer-field {
+    width: 100%;
+    padding: 10px;
+    font-size: 1em;
+    box-sizing: border-box;
+}
+
+@media (max-width: 600px) {
+    .task {
+        font-size: 1.2em;
+    }
+
+    .answer-field {
+        font-size: 0.9em;
+    }
 }
