@@ -1,5 +1,6 @@
 import Swiper from 'https://unpkg.com/swiper@9.1.0/swiper-bundle.esm.browser.min.js';
 import { generateQuestion } from "./math.js";
+import { generateMathTask } from './math.js';
 
 let swiper;
 
@@ -26,12 +27,6 @@ document.addEventListener('DOMContentLoaded', function() {
     addNewSlide(swiper);
 });
 
-function generateMathTask() {
-    const task=document.createElement('div');
-    task.textContent='Neue Matheaufgabe'; 
-    return task;
-}
-
 function addNewSlide(swiper) {
     const newSlide=document.createElement('div');
     newSlide.classList.add('swiper-slide');
@@ -42,3 +37,5 @@ function addNewSlide(swiper) {
     swiper.appendSlide(newSlide);
     swiper.update();
 }
+
+export { addNewSlide };
