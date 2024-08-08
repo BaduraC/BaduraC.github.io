@@ -44,13 +44,16 @@ function checkAnswer() {
 }
 
 // Initiale Frage generieren
-window.onload=function() {
+window.onload = function() {
     generateQuestion();
-    document.getElementById('answer').addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            checkAnswer();
-        }
-    });
+    const answerElement = document.getElementById('answer');
+    if (answerElement) {
+        answerElement.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+    }
 }
 
 export {generateQuestion, checkAnswer};
