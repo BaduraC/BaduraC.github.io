@@ -1,5 +1,5 @@
-let currentQuestion;
-let currentAnswer;
+let currentQuestion='';
+let currentAnswer=0;
 
 function generateQuestion() {
     const num1 = Math.floor(Math.random() * 10) + 1;
