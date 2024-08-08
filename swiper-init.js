@@ -30,10 +30,11 @@ document.addEventListener('DOMContentLoaded', function() {
 function addNewSlide(swiper) {
     const newSlide=document.createElement('div');
     newSlide.classList.add('swiper-slide');
-    const taskContainer=document.createElement('div');
-    taskContainer.id='task-container';
-    taskContainer.appendChild(generateMathTask());
-    newSlide.appendChild(taskContainer);
+    //const taskContainer=document.createElement('div');
+    //taskContainer.id='task-container';
+    //taskContainer.appendChild(generateMathTask());
+    //newSlide.appendChild(taskContainer);
+    newSlide.appendChild(generateMathTask());
     swiper.appendSlide(newSlide);
     swiper.update();
 }

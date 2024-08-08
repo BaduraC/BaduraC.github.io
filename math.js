@@ -43,17 +43,6 @@ function checkAnswer() {
     document.getElementById('answer').value = '';
 }
 
-// Initiale Frage generieren
-window.onload = function() {
-    generateQuestion();
-    const answerElement = document.getElementById('answer');
-    if (answerElement) {
-        answerElement.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                checkAnswer();
-            }
-        });
-    }
-}
+
 
 export {generateQuestion, checkAnswer};
