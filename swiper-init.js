@@ -1,6 +1,6 @@
 import Swiper from 'https://unpkg.com/swiper@9.1.0/swiper-bundle.esm.browser.min.js';
 import { generateQuestion } from "./math.js";
-import { generateMathTask } from './math.js';
+import { generateMathTask } from './main.js';
 
 let swiper;
 
