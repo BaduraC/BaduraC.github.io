@@ -1,7 +1,9 @@
 import { generateQuestion } from "./math.js";
 
+let swiper;
+
 document.addEventListener('DOMContentLoaded', function() {
-    const swiper = new Swiper('.swiper-container', {
+    swiper = new Swiper('.swiper-container', {
         direction: 'vertical',
         loop: true,
         
