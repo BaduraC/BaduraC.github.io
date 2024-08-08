@@ -4,10 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const swiper = new Swiper('.swiper-container', {
         direction: 'vertical',
         loop: true,
-        pagination: {
-            el: '.swiper-pagination',
-            clickable: true,
-        },
+        
         navigation: {
             nextEl: '.swiper-button-next',
             prevEl: '.swiper-button-prev',
@@ -15,10 +12,21 @@ document.addEventListener('DOMContentLoaded', function() {
         on: {
             slideChange: function() {
                 generateQuestion();
+                addNewSlide(swiper);
             }
         }
     });
 
     //generate the first question when the side is loading
     generateQuestion();
+    addNewSlide(swiper);
 });
+
+function addNewSlide(swiper) {
+    const newSlide=document.createElement('div');
+    newSlide.classList.add('swiper-slide');
+    const taskContainer=document.createElement('div');
+    taskContainer.id='task-container';
+    newSlide.appendChild(taskContainer);
+    swiper.appendSlide(newSlide);
+}
