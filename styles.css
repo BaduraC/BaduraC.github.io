@@ -59,4 +59,8 @@ button {
 .swiper-button-next,
 .swiper-button-prev {
     color: #000; /* Farbe der Pfeile */
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10; /* Stelle sicher, dass die Pfeile über den Slides liegen */
 }
