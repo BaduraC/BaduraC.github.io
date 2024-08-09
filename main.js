@@ -1,7 +1,7 @@
 import { generateQuestion, checkAnswer } from './math.js';
 
 function generateMathTask() {
-    generateQuestion();
+    const question = generateQuestion();
     const taskContainer = document.createElement('div');
     taskContainer.id = 'task-container';
     taskContainer.textContent = question;

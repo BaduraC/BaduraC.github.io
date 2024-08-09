@@ -22,7 +22,7 @@ function generateQuestion() {
             break;
     }
 
-    currentQuestion = '${num1} ${operator} ${num2}';
+    currentQuestion = `${num1} ${operator} ${num2}`;
     document.querySelector('#task-container').innerText = currentQuestion;
 }
 
