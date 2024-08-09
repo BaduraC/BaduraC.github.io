@@ -4,6 +4,7 @@ function generateMathTask() {
     generateQuestion();
     const taskContainer = document.createElement('div');
     taskContainer.id = 'task-container';
+    taskContainer.textContent = question;
 
     const answerInput = document.createElement('input');
     answerInput.type = 'text';

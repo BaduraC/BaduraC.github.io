@@ -34,7 +34,7 @@ function checkAnswer() {
         feedback.innerText = 'Richtig!';
         feedback.style.color = 'green';
     } else {
-        feedback.innerText = `Falsch! Die richtige Antwort ist ${currentAnswer}`;
+        feedback.innerText = 'Falsch! Die richtige Antwort ist ${currentAnswer}';
         feedback.style.color = 'red';
     }
 
