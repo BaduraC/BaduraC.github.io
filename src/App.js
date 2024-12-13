@@ -4,7 +4,8 @@ import AddButton from './components/AddButton';
 import ButtonGrid from './components/ButtonGrid';
 import Modal from './components/Modal';
 import Container from '@mui/material/Container';
-import { addTracker, getTrackers, updateTracker, deleteTracker } from './utils/db';
+import Button from '@mui/material/Button';
+import { addTracker, getTrackers, updateTracker, deleteTracker, clearTrackers } from './utils/db';
 
 const App = () => {
   const [buttons, setButtons] = useState([]);
@@ -14,7 +15,7 @@ const App = () => {
    useEffect(() => {
     const fetchTrackers = async () => {
       const trackers = await getTrackers();
-      setButtons(trackers);
+      setButtons(Array.isArray(trackers) ? trackers : []);
     };
     fetchTrackers();
   }, []);
@@ -36,12 +37,21 @@ const App = () => {
   const handleDeleteButton = (id) => {
     setButtons(buttons.filter(button => button.id !== id));
   };
+  const handleClearAll = async () => {
+    if (window.confirm('Möchten Sie wirklich alle Tracker löschen?')) {
+      await clearTrackers();
+      setButtons([]);
+    }
+  };
 
   return (
     <Container>
       <h1>Data-Tracking-App</h1>
       <AddButton onClick={handleAddButtonClick} />
       <ButtonGrid buttons={buttons} onDelete={handleDeleteButton}/>
+      <Button variant="contained" color="secondary" onClick={handleClearAll}>
+        Alle Tracker löschen
+      </Button>
       <Modal open={modalOpen} onClose={handleModalClose} onSave={handleSaveButton} />
     </Container>
   );

@@ -22,7 +22,8 @@ export const addTracker = async (tracker) => {
 
 export const getTrackers = async () => {
   const db = await initDB();
-  return db.getAll(STORE_NAME);
+  const trackers = await db.getAll(STORE_NAME);
+  return Array.isArray(trackers) ? trackers : [];
 };
 
 export const updateTracker = async (tracker) => {
@@ -33,4 +34,12 @@ export const updateTracker = async (tracker) => {
 export const deleteTracker = async (id) => {
   const db = await initDB();
   return db.delete(STORE_NAME, id);
+};
+
+export const clearTrackers = async () => {
+  const db = await initDB();
+  const tx = db.transaction(STORE_NAME, 'readwrite');
+  const store = tx.objectStore(STORE_NAME);
+  await store.clear();
+  await tx.done;
 };
