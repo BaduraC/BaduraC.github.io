@@ -2,44 +2,79 @@
 import { openDB } from 'idb';
 
 const DB_NAME = 'trackerDB';
-const DB_VERSION = 1;
-const STORE_NAME = 'trackers';
+const DB_VERSION = 2; // Erhöhen Sie die Versionsnummer
+const COUNTER_TRACKER_STORE_NAME = 'counterTrackers';
+const TIME_TRACKER_STORE_NAME = 'timeTrackers';
 
 const initDB = async () => {
   return openDB(DB_NAME, DB_VERSION, {
-    upgrade(db) {
-      if (!db.objectStoreNames.contains(STORE_NAME)) {
-        db.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true });
+    upgrade(db, oldVersion, newVersion, transaction) {
+      if (!db.objectStoreNames.contains(COUNTER_TRACKER_STORE_NAME)) {
+        db.createObjectStore(COUNTER_TRACKER_STORE_NAME, { keyPath: 'id', autoIncrement: true });
+      }
+      if (!db.objectStoreNames.contains(TIME_TRACKER_STORE_NAME)) {
+        db.createObjectStore(TIME_TRACKER_STORE_NAME, { keyPath: 'id', autoIncrement: true });
       }
     },
   });
 };
 
-export const addTracker = async (tracker) => {
+// Funktionen für Counter-Tracker
+export const addCounterTracker = async (tracker) => {
   const db = await initDB();
-  return db.add(STORE_NAME, tracker);
+  return db.add(COUNTER_TRACKER_STORE_NAME, tracker);
 };
 
-export const getTrackers = async () => {
+export const getCounterTrackers = async () => {
   const db = await initDB();
-  const trackers = await db.getAll(STORE_NAME);
+  const trackers = await db.getAll(COUNTER_TRACKER_STORE_NAME);
   return Array.isArray(trackers) ? trackers : [];
 };
 
-export const updateTracker = async (tracker) => {
+export const updateCounterTracker = async (tracker) => {
   const db = await initDB();
-  return db.put(STORE_NAME, tracker);
+  return db.put(COUNTER_TRACKER_STORE_NAME, tracker);
 };
 
-export const deleteTracker = async (id) => {
+export const deleteCounterTracker = async (id) => {
   const db = await initDB();
-  return db.delete(STORE_NAME, id);
+  return db.delete(COUNTER_TRACKER_STORE_NAME, id);
 };
 
-export const clearTrackers = async () => {
+export const clearCounterTrackers = async () => {
   const db = await initDB();
-  const tx = db.transaction(STORE_NAME, 'readwrite');
-  const store = tx.objectStore(STORE_NAME);
+  const tx = db.transaction(COUNTER_TRACKER_STORE_NAME, 'readwrite');
+  const store = tx.objectStore(COUNTER_TRACKER_STORE_NAME);
+  await store.clear();
+  await tx.done;
+};
+
+// Funktionen für Zeit-Tracker
+export const addTimeTracker = async (timeTracker) => {
+  const db = await initDB();
+  return db.add(TIME_TRACKER_STORE_NAME, timeTracker);
+};
+
+export const getTimeTrackers = async () => {
+  const db = await initDB();
+  const timeTrackers = await db.getAll(TIME_TRACKER_STORE_NAME);
+  return Array.isArray(timeTrackers) ? timeTrackers : [];
+};
+
+export const updateTimeTracker = async (timeTracker) => {
+  const db = await initDB();
+  return db.put(TIME_TRACKER_STORE_NAME, timeTracker);
+};
+
+export const deleteTimeTracker = async (id) => {
+  const db = await initDB();
+  return db.delete(TIME_TRACKER_STORE_NAME, id);
+};
+
+export const clearTimeTrackers = async () => {
+  const db = await initDB();
+  const tx = db.transaction(TIME_TRACKER_STORE_NAME, 'readwrite');
+  const store = tx.objectStore(TIME_TRACKER_STORE_NAME);
   await store.clear();
   await tx.done;
 };

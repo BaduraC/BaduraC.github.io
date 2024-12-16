@@ -1,21 +1,25 @@
-// [App.js](http://_vscodecontentref_/#%7B%22uri%22%3A%7B%22%24mid%22%3A1%2C%22fsPath%22%3A%22c%3A%5C%5CUsers%5C%5CCollin%5C%5CDocuments%5C%5CForschungspraktikum%5C%5Cdata-tracker-pwa%5C%5Csrc%5C%5CApp.js%22%2C%22_sep%22%3A1%2C%22path%22%3A%22%2Fc%3A%2FUsers%2FCollin%2FDocuments%2FForschungspraktikum%2Fdata-tracker-pwa%2Fsrc%2FApp.js%22%2C%22scheme%22%3A%22file%22%7D%7D)
 import React, { useState, useEffect } from 'react';
 import AddButton from './components/AddButton';
 import ButtonGrid from './components/ButtonGrid';
 import Modal from './components/Modal';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
-import { addTracker, getTrackers, updateTracker, deleteTracker, clearTrackers } from './utils/db';
+import { addCounterTracker, getCounterTrackers, clearCounterTrackers, deleteCounterTracker, addTimeTracker, getTimeTrackers, clearTimeTrackers, deleteTimeTracker } from './utils/db';
+import CounterTrackerButton from './components/CounterTrackerButton';
+import TimeTrackerButton from './components/TimeTrackerButton';
 
 const App = () => {
-  const [buttons, setButtons] = useState([]);
+  const [counterTrackers, setCounterTrackers] = useState([]);
+  const [timeTrackers, setTimeTrackers] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
 
-   // Tracker beim Laden der App abrufen
-   useEffect(() => {
+  // Tracker beim Laden der App abrufen
+  useEffect(() => {
     const fetchTrackers = async () => {
-      const trackers = await getTrackers();
-      setButtons(Array.isArray(trackers) ? trackers : []);
+      const counterTrackers = await getCounterTrackers();
+      setCounterTrackers(Array.isArray(counterTrackers) ? counterTrackers : []);
+      const timeTrackers = await getTimeTrackers();
+      setTimeTrackers(Array.isArray(timeTrackers) ? timeTrackers : []);
     };
     fetchTrackers();
   }, []);
@@ -29,18 +33,30 @@ const App = () => {
   };
 
   const handleSaveButton = async (button) => {
-  const id = await addTracker({ ...button, count: 0 });
-  setButtons([...buttons, { ...button, id, count: 0 }]);
-  setModalOpen(false);
+    if (button.type === 'counter') {
+      const id = await addCounterTracker({ ...button, count: 0 });
+      setCounterTrackers([...counterTrackers, { ...button, id, count: 0 }]);
+    } else if (button.type === 'time') {
+      const id = await addTimeTracker({ ...button, startTime: null, endTime: null });
+      setTimeTrackers([...timeTrackers, { ...button, id, startTime: null, endTime: null }]);
+    }
+    setModalOpen(false);
   };
 
-  const handleDeleteButton = (id) => {
-    setButtons(buttons.filter(button => button.id !== id));
+  const handleDeleteCounterTrackerButton = (id) => {
+    setCounterTrackers(counterTrackers.filter(tracker => tracker.id !== id));
   };
+
+  const handleDeleteTimeTrackerButton = (id) => {
+    setTimeTrackers(timeTrackers.filter(tracker => tracker.id !== id));
+  };
+
   const handleClearAll = async () => {
     if (window.confirm('Möchten Sie wirklich alle Tracker löschen?')) {
-      await clearTrackers();
-      setButtons([]);
+      await clearCounterTrackers();
+      await clearTimeTrackers();
+      setCounterTrackers([]);
+      setTimeTrackers([]);
     }
   };
 
@@ -48,11 +64,22 @@ const App = () => {
     <Container>
       <h1>Data-Tracking-App</h1>
       <AddButton onClick={handleAddButtonClick} />
-      <ButtonGrid buttons={buttons} onDelete={handleDeleteButton}/>
+      <ButtonGrid buttons={counterTrackers} onDelete={handleDeleteCounterTrackerButton} />
       <Button variant="contained" color="secondary" onClick={handleClearAll}>
         Alle Tracker löschen
       </Button>
       <Modal open={modalOpen} onClose={handleModalClose} onSave={handleSaveButton} />
+      {timeTrackers.map(tracker => (
+        <TimeTrackerButton
+          key={tracker.id}
+          id={tracker.id}
+          name={tracker.name}
+          color={tracker.color}
+          initialStartTime={tracker.startTime}
+          initialEndTime={tracker.endTime}
+          onDelete={handleDeleteTimeTrackerButton}
+        />
+      ))}
     </Container>
   );
 };

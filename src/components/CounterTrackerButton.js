@@ -3,21 +3,21 @@ import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { updateTracker, deleteTracker } from '../utils/db';
+import { updateCounterTracker, deleteCounterTracker } from '../utils/db';
 
-const DataButton = ({ id, name, color, initialCount, onDelete }) => {
+const CounterTrackerButton = ({ id, name, color, initialCount, onDelete }) => {
   const [count, setCount] = useState(initialCount);
 
   const handleClick = async () => {
     const newCount = count + 1;
     setCount(newCount);
-    await updateTracker({ id, name, color, count: newCount });
+    await  updateCounterTracker({ id, name, color, count: newCount });
   };
 
   const handleDelete = async () => {
     if(window.confirm('Möchten SIe diesen Tracker wirklich löschen?')){
       try {
-        await deleteTracker(id);
+        await deleteCounterTracker(id);
       onDelete(id);
       } catch (error) {
         console.error('Fehler beim Löschen des Trackers:', error);
@@ -41,4 +41,4 @@ const DataButton = ({ id, name, color, initialCount, onDelete }) => {
   );
 };
 
-export default DataButton;
+export default CounterTrackerButton;
