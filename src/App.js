@@ -17,8 +17,10 @@ const App = () => {
   useEffect(() => {
     const fetchTrackers = async () => {
       const counterTrackers = await getCounterTrackers();
+      console.log('Counter Trackers:', counterTrackers);
       setCounterTrackers(Array.isArray(counterTrackers) ? counterTrackers : []);
       const timeTrackers = await getTimeTrackers();
+      console.log('Time Trackers:', timeTrackers);
       setTimeTrackers(Array.isArray(timeTrackers) ? timeTrackers : []);
     };
     fetchTrackers();
@@ -69,17 +71,17 @@ const App = () => {
         Alle Tracker löschen
       </Button>
       <Modal open={modalOpen} onClose={handleModalClose} onSave={handleSaveButton} />
-      {timeTrackers.map(tracker => (
-        <TimeTrackerButton
-          key={tracker.id}
-          id={tracker.id}
-          name={tracker.name}
-          color={tracker.color}
-          initialStartTime={tracker.startTime}
-          initialEndTime={tracker.endTime}
-          onDelete={handleDeleteTimeTrackerButton}
-        />
-      ))}
+        {timeTrackers.map(tracker => (
+          <TimeTrackerButton
+            key={tracker.id}
+            id={tracker.id}
+            name={tracker.name}
+            color={tracker.color}
+            initialStartTime={tracker.startTime}
+            initialEndTime={tracker.endTime}
+            onDelete={handleDeleteTimeTrackerButton}
+          />
+        ))}
     </Container>
   );
 };

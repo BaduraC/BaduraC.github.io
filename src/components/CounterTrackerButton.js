@@ -11,7 +11,7 @@ const CounterTrackerButton = ({ id, name, color, initialCount, onDelete }) => {
   const handleClick = async () => {
     const newCount = count + 1;
     setCount(newCount);
-    await  updateCounterTracker({ id, name, color, count: newCount });
+    await  updateCounterTracker({ id, name, color, count: newCount, type: 'counter' });
   };
 
   const handleDelete = async () => {
