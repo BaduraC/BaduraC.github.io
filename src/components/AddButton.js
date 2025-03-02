@@ -1,17 +1,24 @@
 // src/components/AddButton.js
 import React from 'react';
 import Button from '@mui/material/Button';
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from '@mui/icons-material/AddCircleOutline';
 
 const AddButton = ({ onClick }) => {
   return (
     <Button
-      variant="contained"
-      color="primary"
+      
+      
       onClick={onClick}
-      style={{ width: '100px', height: '100px', margin: '10px' }}
+      sx={{
+        width: 100,
+        height: 100,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 0,
+      }}
     >
-      <AddIcon />
+      <AddIcon sx={{fontSize: 80}} />
     </Button>
   );
 };

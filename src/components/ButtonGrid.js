@@ -3,12 +3,13 @@ import React from 'react';
 import Grid2 from '@mui/material/Grid2';
 import CounterTrackerButton from './CounterTrackerButton';
 import TimeTrackerButton from './TimeTrackerButton';
+import AddButton from './AddButton';
 
-const ButtonGrid = ({ buttons, onDelete }) => {
+const ButtonGrid = ({ buttons, onDelete, onAddButtonClick }) => {
   return (
-    <Grid2 container spacing={2}>
+    <Grid2 container spacing={1} sx={{width: '100%'}}>
       {buttons.map((button) => (
-        <Grid2 item="true" xs={12} key={button.id}>
+        <Grid2 item="true" xs={12} sm={6} md={4} key={button.id}>
           {button.type === 'counter' ? (
             <CounterTrackerButton
               id={button.id}
@@ -17,7 +18,7 @@ const ButtonGrid = ({ buttons, onDelete }) => {
               initialCount={button.count || 0}
               onDelete={onDelete}
             />
-          ) : (
+          ) : button.type === 'time' ? (
             <TimeTrackerButton
               id={button.id}
               name={button.name}
@@ -27,6 +28,8 @@ const ButtonGrid = ({ buttons, onDelete }) => {
               initialAccumulatedTime={button.accumulatedTime || 0}
               onDelete={onDelete}
             />
+          ) : (
+            <AddButton onClick={onAddButtonClick} />
           )}
         </Grid2>
       ))}

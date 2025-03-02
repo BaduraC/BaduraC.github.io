@@ -2,9 +2,10 @@
 import { openDB } from 'idb';
 
 const DB_NAME = 'trackerDB';
-const DB_VERSION = 2; // Erhöhen Sie die Versionsnummer
+const DB_VERSION = 4; // Erhöhen Sie die Versionsnummer
 const COUNTER_TRACKER_STORE_NAME = 'counterTrackers';
 const TIME_TRACKER_STORE_NAME = 'timeTrackers';
+const SETTINGS_STORE_NAME = 'settings';
 
 const initDB = async () => {
   return openDB(DB_NAME, DB_VERSION, {
@@ -14,6 +15,9 @@ const initDB = async () => {
       }
       if (!db.objectStoreNames.contains(TIME_TRACKER_STORE_NAME)) {
         db.createObjectStore(TIME_TRACKER_STORE_NAME, { keyPath: 'id', autoIncrement: true });
+      }
+      if(!db.objectStoreNames.contains(SETTINGS_STORE_NAME)){
+        db.createObjectStore(SETTINGS_STORE_NAME, { keyPath: 'key' });
       }
     },
   });
@@ -77,4 +81,15 @@ export const clearTimeTrackers = async () => {
   const store = tx.objectStore(TIME_TRACKER_STORE_NAME);
   await store.clear();
   await tx.done;
+};
+
+// Funktionen für Einstellungen
+export const saveSetting = async (key, value) => {
+  const db = await initDB();
+  return db.put(SETTINGS_STORE_NAME, { key, value });
+};
+
+export const getSetting = async (key) => {
+  const db = await initDB();
+  return db.get(SETTINGS_STORE_NAME, key);
 };

@@ -1,88 +1,41 @@
 import React, { useState, useEffect } from 'react';
-import AddButton from './components/AddButton';
-import ButtonGrid from './components/ButtonGrid';
-import Modal from './components/Modal';
-import Container from '@mui/material/Container';
-import Button from '@mui/material/Button';
-import { addCounterTracker, getCounterTrackers, clearCounterTrackers, deleteCounterTracker, addTimeTracker, getTimeTrackers, clearTimeTrackers, deleteTimeTracker } from './utils/db';
-import CounterTrackerButton from './components/CounterTrackerButton';
-import TimeTrackerButton from './components/TimeTrackerButton';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Home from './pages/Home';
+import Analytics from './pages/Analytics';
+import Goals from './pages/Goals';
+import ProfilePage from './pages/ProfilePage';
+import LoginPage from './pages/LoginPage';
+import { getSetting, saveSetting } from './utils/db';
+
 
 const App = () => {
-  const [counterTrackers, setCounterTrackers] = useState([]);
-  const [timeTrackers, setTimeTrackers] = useState([]);
-  const [modalOpen, setModalOpen] = useState(false);
+  const [colorTheme, setColorTheme] = useState('#3f51b5'); // Standardfarbe
 
-  // Tracker beim Laden der App abrufen
   useEffect(() => {
-    const fetchTrackers = async () => {
-      const counterTrackers = await getCounterTrackers();
-      console.log('Counter Trackers:', counterTrackers);
-      setCounterTrackers(Array.isArray(counterTrackers) ? counterTrackers : []);
-      const timeTrackers = await getTimeTrackers();
-      console.log('Time Trackers:', timeTrackers);
-      setTimeTrackers(Array.isArray(timeTrackers) ? timeTrackers : []);
+    const fetchColorTheme = async () => {
+      const savedColorTheme = await getSetting('colorTheme');
+      if (savedColorTheme) {
+        setColorTheme(savedColorTheme.value);
+      }
     };
-    fetchTrackers();
+    fetchColorTheme();
   }, []);
 
-  const handleAddButtonClick = () => {
-    setModalOpen(true);
-  };
-
-  const handleModalClose = () => {
-    setModalOpen(false);
-  };
-
-  const handleSaveButton = async (button) => {
-    if (button.type === 'counter') {
-      const id = await addCounterTracker({ ...button, count: 0 });
-      setCounterTrackers([...counterTrackers, { ...button, id, count: 0 }]);
-    } else if (button.type === 'time') {
-      const id = await addTimeTracker({ ...button, startTime: null, endTime: null });
-      setTimeTrackers([...timeTrackers, { ...button, id, startTime: null, endTime: null }]);
-    }
-    setModalOpen(false);
-  };
-
-  const handleDeleteCounterTrackerButton = (id) => {
-    setCounterTrackers(counterTrackers.filter(tracker => tracker.id !== id));
-  };
-
-  const handleDeleteTimeTrackerButton = (id) => {
-    setTimeTrackers(timeTrackers.filter(tracker => tracker.id !== id));
-  };
-
-  const handleClearAll = async () => {
-    if (window.confirm('Möchten Sie wirklich alle Tracker löschen?')) {
-      await clearCounterTrackers();
-      await clearTimeTrackers();
-      setCounterTrackers([]);
-      setTimeTrackers([]);
-    }
+  const handleColorThemeChange = async (newColorTheme) => {
+    setColorTheme(newColorTheme);
+    await saveSetting('colorTheme', newColorTheme);
   };
 
   return (
-    <Container>
-      <h1>Data-Tracking-App</h1>
-      <AddButton onClick={handleAddButtonClick} />
-      <ButtonGrid buttons={counterTrackers} onDelete={handleDeleteCounterTrackerButton} />
-      <Button variant="contained" color="secondary" onClick={handleClearAll}>
-        Alle Tracker löschen
-      </Button>
-      <Modal open={modalOpen} onClose={handleModalClose} onSave={handleSaveButton} />
-        {timeTrackers.map(tracker => (
-          <TimeTrackerButton
-            key={tracker.id}
-            id={tracker.id}
-            name={tracker.name}
-            color={tracker.color}
-            initialStartTime={tracker.startTime}
-            initialEndTime={tracker.endTime}
-            onDelete={handleDeleteTimeTrackerButton}
-          />
-        ))}
-    </Container>
+    <Router>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/home" element={<Home colorTheme={colorTheme} />} />
+        <Route path="/analytics" element={<Analytics colorTheme={colorTheme} />} />
+        <Route path="/goals" element={<Goals colorTheme={colorTheme} />} />
+        <Route path="/profile" element={<ProfilePage colorTheme={colorTheme} setColorTheme={handleColorThemeChange} />} />
+      </Routes>
+    </Router>
   );
 };
 
