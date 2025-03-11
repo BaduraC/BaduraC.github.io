@@ -93,7 +93,7 @@ To set up the project locally, follow these steps:
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/data-tracker-pwa.git
+git clone https://github.com/badurac/data-tracker-pwa.git
 cd data-tracker-pwa
 
 # Install dependencies
@@ -141,16 +141,6 @@ Creates a production build of the app.
     ```
 4. **Try the Live Demo**: [https://your-username.github.io/data-tracker-pwa](https://your-username.github.io/data-tracker-pwa)
 
----
-
-## 🤝 Contributing
-
-Contributions are always welcome! To contribute:
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature-branch`).
-3. Commit your changes (`git commit -m 'Added new feature'`).
-4. Push to the branch (`git push origin feature-branch`).
-5. Open a pull request.
 
 ---
 
