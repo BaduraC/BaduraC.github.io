@@ -66,11 +66,11 @@ A **Progressive Web App (PWA)** for tracking various data points using counters 
 Here are some images and a video from the **original prototype**, which was created in **Figma** before being developed into this PWA:
 
 ### **Screenshots:**
-![Prototype Link Screen](documentation\Datra Screenshot.png)
+![Prototype Link Screen](documentation/Datra Screenshot.png)
 
 
 ### **Prototype Walkthrough Video:**
-[![Prototype video](documentation\datralogo.png)](documentation\Datra Video.mp4)
+[Prototype video](documentation/Datra Video.mp4)
 
 These resources illustrate the design ideas and user interface before implementation. The goal was to make the transition from **design to functional PWA** as simle as possible.
 
