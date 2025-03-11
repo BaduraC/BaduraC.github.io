@@ -62,7 +62,7 @@ const Home = ({ colorTheme }) => {
     }
   };
 
-  const allTrackers = [...counterTrackers, ...timeTrackers, { type: 'addButton' }];
+  const allTrackers = [...counterTrackers, ...timeTrackers];
 
   return (
     <div className="main-container">

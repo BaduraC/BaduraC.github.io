@@ -28,11 +28,12 @@ const ButtonGrid = ({ buttons, onDelete, onAddButtonClick }) => {
               initialAccumulatedTime={button.accumulatedTime || 0}
               onDelete={onDelete}
             />
-          ) : (
-            <AddButton onClick={onAddButtonClick} />
-          )}
+          ) : null}
         </Grid2>
       ))}
+          <Grid2 item="true" xs={12} sm={6} md={4}>
+            <AddButton onClick={onAddButtonClick} />
+          </Grid2>
     </Grid2>
   );
 };
