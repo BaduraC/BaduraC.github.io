@@ -5,7 +5,6 @@ import FooterNav from '../components/Footer';
 
 const ProfilePage = ({ colorTheme, setColorTheme }) => {
   const handleEditProfile = () => {
-    // Hier kannst du die Logik zum Bearbeiten des Profils hinzufügen
     alert('Profil bearbeiten');
   };
 
