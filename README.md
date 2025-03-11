@@ -4,7 +4,7 @@
 This is my first attempt at building a **Progressive Web App (PWA)**, so while I try to follow best practices, I am sure there might be areas for improvement. Also, the app is not finished yet, but if I have enough time in the future, I may continue working on it. This project started as part of a university course where I initially created an app prototype using **Figma**. When the course ended, I realized that this app had great potential, so I decided to continue and turn the prototype into a fully functional PWA. 
 
 If you have any **best practices, feedback, or suggestions**, I would greatly appreciate them! Additionally, you can try the app **directly in your browser** or **install it** on your device via **GitHub Pages**: 
-👉 [Live Demo on GitHub Pages](https://your-username.github.io/data-tracker-pwa)
+👉 [Live Demo on GitHub Pages](https://badurac.github.io/data-tracker-pwa)
 
 ---
 
@@ -62,14 +62,17 @@ A **Progressive Web App (PWA)** for tracking various data points using counters 
 
 ---
 
-## 📷 Figma Prototype Screenshots
-Here are some images from the **original prototype**, which was created in **Figma** before being developed into this PWA:
+## 📷 Figma Prototype
+Here are some images and a video from the **original prototype**, which was created in **Figma** before being developed into this PWA:
 
-![Prototype Home Screen](path/to/home-screen-image.png)
-![Prototype Tracker Selection](path/to/tracker-selection-image.png)
-![Prototype Analytics View](path/to/analytics-view-image.png)
+### **Screenshots:**
+![Prototype Link Screen](documentation\Datra Screenshot.png)
 
-These screenshots illustrate the design ideas and user interface before implementation. The goal was to make the transition from **design to functional PWA** as seamless as possible.
+
+### **Prototype Walkthrough Video:**
+[![Prototype video](documentation\datralogo.png)](documentation\Datra Video.mp4)
+
+These resources illustrate the design ideas and user interface before implementation. The goal was to make the transition from **design to functional PWA** as simle as possible.
 
 ---
 
@@ -159,9 +162,9 @@ This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) f
 
 ## 📩 Contact
 
-For any inquiries or collaboration opportunities, feel free to contact:
-- **Your Name** - [your-email@example.com](mailto:your-email@example.com)
-- **GitHub** - [github.com/your-username](https://github.com/your-username)
+For any inquiries, tips, or suggestions for improvement, feel free to contact me:
+- **Mail** - [collinmueller97@googlemail.com](mailto:collinmueller97@googlemail.com)
+- **GitHub** - [github.com/badurac](https://github.com/badurac)
 
 ---
 
