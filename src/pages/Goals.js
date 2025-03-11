@@ -5,7 +5,7 @@ import Header from '../components/Header';
 
 const Goals = ({colorTheme}) => {
   return (
-    <div className="main-container">
+    <div className="main-container" style={{marginTop: '58px'}}>
       <Header colorTheme={colorTheme} />
       <Container>
         <Typography variant="h4" component="h1" gutterBottom>

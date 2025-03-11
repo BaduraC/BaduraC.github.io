@@ -23,7 +23,6 @@ const Analytics = ({ colorTheme }) => {
   }, []);
 
   useEffect(() => {
-    // Filtere die Daten basierend auf dem ausgewählten Tracker und Zeitraum
     const filteredData = [...counterTrackers, ...timeTrackers]
       .filter(tracker => tracker.name === selectedTracker)
       .map(tracker => ({
@@ -42,7 +41,7 @@ const Analytics = ({ colorTheme }) => {
   };
 
   return (
-    <div className="main-container">
+    <div className="main-container"style={{marginTop: '58px'}}>
       <Header colorTheme={colorTheme} />
       <Container>
         <Typography variant="h4" component="h1" gutterBottom>
