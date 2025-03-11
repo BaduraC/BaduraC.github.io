@@ -1,4 +1,3 @@
-// src/components/Modal.js
 import React, { useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';

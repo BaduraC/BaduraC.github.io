@@ -1,8 +1,7 @@
-// src/utils/db.js
 import { openDB } from 'idb';
 
 const DB_NAME = 'trackerDB';
-const DB_VERSION = 4; // Erhöhen Sie die Versionsnummer
+const DB_VERSION = 4; // Versionsnummer erhöhen bei Datenbankänderung!!!!
 const COUNTER_TRACKER_STORE_NAME = 'counterTrackers';
 const TIME_TRACKER_STORE_NAME = 'timeTrackers';
 const SETTINGS_STORE_NAME = 'settings';
